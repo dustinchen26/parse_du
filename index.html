@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</title>
+    <style>
+        /* Style to align parsed results */
+        .parsed-result {
+            white-space: pre;
+            font-family: monospace;
+			line-height: 0; /* Set line height to 1 to reduce spacing between lines */
+        }
+    </style>
+    <script>
+        function parseStats(content) {
+            var results = [];
+            var lines = content.split('\n');
+
+            var sch_dl_tpt = null;
+            var ul_tpt = null;
+            var ue_info = null;
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+
+                if (line.includes("SCH  DL Tpt")) {
+                    var sch_dl_tpt_match = line.match(/SCH\s+DL\s+Tpt\s+:\s+([\d.]+)/);
+                    if (sch_dl_tpt_match) {
+                        sch_dl_tpt = parseFloat(sch_dl_tpt_match[1]);
+                        var ul_tpt_match = line.match(/UL\s+Tpt\s+([\d.]+)/);
+                        if (ul_tpt_match) {
+                            ul_tpt = parseFloat(ul_tpt_match[1]);
+                        }
+                    }
+                } else if (ue_info === null && line.match(/^\s*UE-ID\s+CELL-ID\s+ON-SUL\s+DL-TX\s+DL-RETX/)) {
+                    ue_info = line.trim();
+
+                    try {
+                        var next_line_values = lines[i + 1].split(/\s+/);
+                        if (next_line_values.length >= 31) {
+                            var dl_tx = next_line_values[3];
+                            var dl_retx = next_line_values[4];
+                            var dl_mcs = next_line_values[13];
+                            var ul_crc_succ = next_line_values[18];
+                            var ul_crc_fail = next_line_values[19];
+                            var ul_mcs = next_line_values[22];
+                        } else {
+                            var dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
+                        }
+                    } catch (error) {
+                        var dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
+                    }
+
+                    try {
+                        var dl_bler = parseFloat(dl_retx) / (parseFloat(dl_retx) + parseFloat(dl_tx));
+                        dl_bler = isNaN(dl_bler) ? "NaN" : dl_bler.toFixed(4);
+                    } catch (error) {
+                        var dl_bler = "NaN";
+                    }
+
+                    try {
+                        var ul_bler = parseFloat(ul_crc_fail) / (parseFloat(ul_crc_succ) + parseFloat(ul_crc_fail));
+                        ul_bler = isNaN(ul_bler) ? "NaN" : ul_bler.toFixed(4);
+                    } catch (error) {
+                        var ul_bler = "NaN";
+                    }
+
+                    var outputLine = "SCH  DL Tpt: " + sch_dl_tpt.toFixed(2).padStart(7) + "  UL Tpt: " + ul_tpt.toFixed(2).padStart(7);
+                    outputLine += "  DL-TX=" + dl_tx.padStart(7) + "  DL-RETX=" + dl_retx.padStart(7) + "  DL-BLER=" + dl_bler.padStart(7);
+                    outputLine += "  DL-MCS=" + dl_mcs.padStart(7) + "  UL-CRC-SUCC=" + ul_crc_succ.padStart(7) + "  UL-CRC-FAIL=" + ul_crc_fail.padStart(7);
+                    outputLine += "  UL-BLER=" + ul_bler.padStart(7) + "  UL-MCS=" + ul_mcs.padStart(7);
+
+                    results.push(outputLine);
+
+                    sch_dl_tpt = null;
+                    ul_tpt = null;
+                    ue_info = null;
+                }
+            }
+
+            return results;
+        }
+    </script>
+</head>
+<body>
+    <h1>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</h1>
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com" style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com" style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+    <p>Please paste the whole du_stats_XXX.txt content below</p>	
+    <textarea id="textInput" rows="10" cols="80" placeholder="Paste text content here"></textarea>
+	<br>
+    <button onclick="parseText()">Parse Text</button>
+    <div id="resultsContainer">
+        <!-- Parsed results will be displayed here -->
+    </div>
+
+    <script>
+        function parseText() {
+            var textInput = document.getElementById("textInput");
+            var textContent = textInput.value;
+            var results = parseStats(textContent);
+            var resultsContainer = document.getElementById("resultsContainer");
+
+            resultsContainer.innerHTML = "";
+
+            for (var i = 0; i < results.length; i++) {
+                var resultElement = document.createElement("p");
+                resultElement.classList.add("parsed-result");
+                resultElement.textContent = results[i];
+                resultsContainer.appendChild(resultElement);
+            }
+        }
+    </script>
+</body>
+</html>
