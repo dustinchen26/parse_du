@@ -2,20 +2,32 @@
   Copyright © [2023] [Dustin_Chen]. All rights reserved.
   Author: Dustin_Chen
   Email:  Dustin_Chen@compal.com or chuhpsdustin@gmail.com
--->  
+-->
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+        }
+
         /* Style to align parsed results */
         .parsed-result {
             white-space: pre;
             font-family: monospace;
-			line-height: 0; /* Set line height to 1 to reduce spacing between lines */
+            line-height: 0;
+            /* Set line height to 1 to reduce spacing between lines */
         }
-	
+
+        a {
+            color: blue;
+            /* 將所有連結的顏色設定為藍色 */
+        }
     </style>
     <script>
         function parseStats(content) {
@@ -71,9 +83,12 @@
                         var ul_bler = "NaN";
                     }
 
-                    var outputLine = "SCH  DL Tpt: " + sch_dl_tpt.toFixed(2).padEnd(9) + "UL Tpt: " + ul_tpt.toFixed(2).padEnd(9);
-                    outputLine += "DL-TX= " + dl_tx.padEnd(9) + "DL-RETX= " + dl_retx.padEnd(9) + "DL-BLER= " + dl_bler.padEnd(9);
-                    outputLine += "DL-MCS= " + dl_mcs.padEnd(9) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(9) + "UL-CRC-FAIL= " + ul_crc_fail.padEnd(9);
+                    var outputLine = "SCH  DL Tpt: " + sch_dl_tpt.toFixed(2).padEnd(9) + "UL Tpt: " + ul_tpt.toFixed(2)
+                        .padEnd(9);
+                    outputLine += "DL-TX= " + dl_tx.padEnd(9) + "DL-RETX= " + dl_retx.padEnd(9) + "DL-BLER= " + dl_bler
+                        .padEnd(9);
+                    outputLine += "DL-MCS= " + dl_mcs.padEnd(9) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(9) +
+                        "UL-CRC-FAIL= " + ul_crc_fail.padEnd(9);
                     outputLine += "UL-BLER= " + ul_bler.padEnd(9) + "UL-MCS= " + ul_mcs.padEnd(9);
 
                     results.push(outputLine);
@@ -88,18 +103,45 @@
         }
     </script>
 </head>
+
 <body>
-    <h1>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</h1>
-    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com" style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com" style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
-	<p><b>● Please paste the whole du_stats_XXX.txt content below, then it will parse the DL/UL Tput, BLER, MCS.</b></p>
-	<p>&nbsp;&nbsp;&nbsp;&nbsp;formula 1: DL-BLER = DL-RETX / (DL-RETX + DL-TX)</p>
-	<p>&nbsp;&nbsp;&nbsp;&nbsp;formula 2: UL-BLER = UL-CRC-FAIL / (UL-CRC-SUCC + UL-CRC-FAIL)</p>
-    <textarea id="textInput" rows="10" cols="80" placeholder="Paste text content here"></textarea>
-	<br>
-    <button onclick="parseText()">Parse Text</button>
-    <div id="resultsContainer">
-        <!-- Parsed results will be displayed here -->
+    <h2>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</h2>
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
+            style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
+            style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+
+    <ul>
+        <li><strong>Reference</strong>
+            <ul>
+                <li>Parse “cu_stats_XXX.txt” => <a href="https://dustinchen26.github.io/parse_cu"
+                        target="_blank">https://dustinchen26.github.io/parse_cu</a></li>
+                <li>Parse “du_stats_XXX.txt” => <a href="https://dustinchen26.github.io/parse_du"
+                        target="_blank">https://dustinchen26.github.io/parse_du</a></li>
+            </ul>
+        </li>
+    </ul>
+    <p></p> <!-- 插入一个空行 -->
+    <ul>
+        <li><strong>Please paste the whole du_stats_XXX.txt content below, then it will parse the DL/UL Tput, BLER,
+                MCS.</strong>
+            <ul>
+                <li>formula 1: DL-BLER = DL-RETX / (DL-RETX + DL-TX)</li>
+                <li>formula 2: UL-BLER = UL-CRC-FAIL / (UL-CRC-SUCC + UL-CRC-FAIL)</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div style="margin-left: 40px;">
+        <textarea id="textInput" rows="10" cols="80" placeholder="Paste text content here"></textarea>
+        <div style="margin-top: 10px;">
+            <button onclick="parseText()">Parse Text</button>
+        </div>
+        <div id="resultsContainer">
+            <!-- Parsed results will be displayed here -->
+        </div>
     </div>
+
+    <br>
 
     <script>
         function parseText() {
@@ -119,4 +161,5 @@
         }
     </script>
 </body>
+
 </html>
