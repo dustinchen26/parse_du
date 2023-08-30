@@ -28,6 +28,16 @@
             color: blue;
             /* 將所有連結的顏色設定為藍色 */
         }
+
+        /* Style for blue text */
+        .blue-text {
+            color: blue;
+        }
+
+        /* Style for red text */
+        .red-text {
+            color: red;
+        }
     </style>
     <script>
         function parseStats(content) {
@@ -83,8 +93,16 @@
                         var ul_bler = "NaN";
                     }
 
-                    var outputLine = "SCH  DL Tpt: " + sch_dl_tpt.toFixed(2).padEnd(9) + "UL Tpt: " + ul_tpt.toFixed(2)
-                        .padEnd(9);
+                    // Add style classes based on conditions
+                    var sch_dl_tpt_class = sch_dl_tpt !== 0 ? "blue-text" : "";
+                    var ul_tpt_class = ul_tpt !== 0 ? "red-text" : "";
+
+                    var outputLine = "SCH  DL Tpt: ";
+                    outputLine += '<span class="' + sch_dl_tpt_class + '">' + sch_dl_tpt.toFixed(2).padEnd(9) + '</span>';
+                    outputLine += "UL Tpt: ";
+                    outputLine += '<span class="' + ul_tpt_class + '">' + ul_tpt.toFixed(2).padEnd(9) + '</span>';
+               
+                        
                     outputLine += "DL-TX= " + dl_tx.padEnd(9) + "DL-RETX= " + dl_retx.padEnd(9) + "DL-BLER= " + dl_bler
                         .padEnd(9);
                     outputLine += "DL-MCS= " + dl_mcs.padEnd(9) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(9) +
@@ -155,7 +173,7 @@
             for (var i = 0; i < results.length; i++) {
                 var resultElement = document.createElement("p");
                 resultElement.classList.add("parsed-result");
-                resultElement.textContent = results[i];
+                resultElement.innerHTML = results[i]; // Use innerHTML instead of textContent to render HTML
                 resultsContainer.appendChild(resultElement);
             }
         }
