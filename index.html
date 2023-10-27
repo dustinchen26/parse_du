@@ -66,6 +66,7 @@
                     try {
                         var next_line_values = lines[i + 1].split(/\s+/);
                         if (next_line_values.length >= 31) {
+                            var ue_id = next_line_values[0];
                             var dl_tx = next_line_values[3];
                             var dl_retx = next_line_values[4];
                             var dl_mcs = next_line_values[13];
@@ -73,10 +74,10 @@
                             var ul_crc_fail = next_line_values[19];
                             var ul_mcs = next_line_values[22];
                         } else {
-                            var dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
+                            var ue_id = dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
                         }
                     } catch (error) {
-                        var dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
+                        var ue_id = dl_tx = dl_retx = dl_mcs = ul_crc_succ = ul_crc_fail = ul_mcs = "NaN";
                     }
 
                     try {
@@ -98,16 +99,16 @@
                     var ul_tpt_class = ul_tpt !== 0 ? "red-text" : "";
 
                     var outputLine = "SCH  DL Tpt: ";
-                    outputLine += '<span class="' + sch_dl_tpt_class + '">' + sch_dl_tpt.toFixed(2).padEnd(9) + '</span>';
+                    outputLine += '<span class="' + sch_dl_tpt_class + '">' + sch_dl_tpt.toFixed(2).padEnd(8) + '</span>';
                     outputLine += "UL Tpt: ";
-                    outputLine += '<span class="' + ul_tpt_class + '">' + ul_tpt.toFixed(2).padEnd(9) + '</span>';
+                    outputLine += '<span class="' + ul_tpt_class + '">' + ul_tpt.toFixed(2).padEnd(8) + '</span>';
                
                         
-                    outputLine += "DL-TX= " + dl_tx.padEnd(9) + "DL-RETX= " + dl_retx.padEnd(9) + "DL-BLER= " + dl_bler
-                        .padEnd(9);
-                    outputLine += "DL-MCS= " + dl_mcs.padEnd(9) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(9) +
-                        "UL-CRC-FAIL= " + ul_crc_fail.padEnd(9);
-                    outputLine += "UL-BLER= " + ul_bler.padEnd(9) + "UL-MCS= " + ul_mcs.padEnd(9);
+                    outputLine += "UE-ID= " + ue_id.padEnd(8) + "DL-TX= " + dl_tx.padEnd(8) + "DL-RETX= " + dl_retx.padEnd(8) + "DL-BLER= " + dl_bler
+                        .padEnd(8);
+                    outputLine += "DL-MCS= " + dl_mcs.padEnd(8) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(8) +
+                        "UL-CRC-FAIL= " + ul_crc_fail.padEnd(8);
+                    outputLine += "UL-BLER= " + ul_bler.padEnd(8) + "UL-MCS= " + ul_mcs.padEnd(8);
 
                     results.push(outputLine);
 
