@@ -9,18 +9,20 @@
 
 <head>
     <title>Parse the du_stats_XXX.txt DL/UL Tput, BLER, MCS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.2;
+			font-size: 15px;			
         }
 
         /* Style to align parsed results */
         .parsed-result {
-            white-space: pre;
-            font-family: monospace;
+			font-family: monospace;
             line-height: 0;
+			font-size: 13px;
+            white-space: pre;
+
             /* Set line height to 1 to reduce spacing between lines */
         }
 
@@ -37,6 +39,11 @@
         .red-text {
             color: red;
         }
+		
+        /* Style for green text */
+        .green-text {
+            color: green;
+        }		
     </style>
     <script>
         function parseStats(content) {
@@ -97,17 +104,16 @@
                     var sch_dl_tpt_class = sch_dl_tpt !== 0 ? "blue-text" : "";
                     var ul_tpt_class = ul_tpt !== 0 ? "red-text" : "";
 
-                    var outputLine = "SCH  DL Tpt: ";
-                    outputLine += '<span class="' + sch_dl_tpt_class + '">' + sch_dl_tpt.toFixed(2).padEnd(8) + '</span>';
-                    outputLine += "UL Tpt: ";
-                    outputLine += '<span class="' + ul_tpt_class + '">' + ul_tpt.toFixed(2).padEnd(8) + '</span>';
+                    var outputLine = '<span class="blue-text">' + "SCH  DL Tpt: ";
+                    outputLine += sch_dl_tpt.toFixed(2).padEnd(8) + '</span>';
+                    outputLine += '<span class="red-text">' + "UL Tpt: ";
+                    outputLine += ul_tpt.toFixed(2).padEnd(8) + '</span>';
                
                         
-                    outputLine += "UE-ID= " + ue_id.padEnd(8) + "DL-TX= " + dl_tx.padEnd(8) + "DL-RETX= " + dl_retx.padEnd(8) + "DL-BLER= " + dl_bler
-                        .padEnd(8);
+                    outputLine += '<span class="green-text">' + "UE-ID= " + ue_id.padEnd(8) + '</span>' + "DL-TX= " + dl_tx.padEnd(8) + "DL-RETX= " + dl_retx.padEnd(8) + '<span class="blue-text">' + "DL-BLER= " + dl_bler.padEnd(8)+ '</span>';
                     outputLine += "DL-MCS= " + dl_mcs.padEnd(8) + "UL-CRC-SUCC= " + ul_crc_succ.padEnd(8) +
                         "UL-CRC-FAIL= " + ul_crc_fail.padEnd(8);
-                    outputLine += "UL-BLER= " + ul_bler.padEnd(8) + "UL-MCS= " + ul_mcs.padEnd(8);
+                    outputLine += '<span class="red-text">' + "UL-BLER= " + ul_bler.padEnd(8) + '</span>' + "UL-MCS= " + ul_mcs.padEnd(8);
 
                     results.push(outputLine);
 
@@ -133,8 +139,10 @@
             <ul>
                 <li>Parse “cu_stats_XXX.txt” => <a href="https://dustinchen26.github.io/parse_cu"
                         target="_blank">https://dustinchen26.github.io/parse_cu</a></li>
-                <li>Parse “du_stats_XXX.txt” => <a href="https://dustinchen26.github.io/parse_du"
+                <li>Parse “du_stats_XXX.txt” 1 UE => <a href="https://dustinchen26.github.io/parse_du"
                         target="_blank">https://dustinchen26.github.io/parse_du</a></li>
+                <li>Parse “du_stats_XXX.txt” multi-UE => <a href="https://dustinchen26.github.io/parse_du2"
+                        target="_blank">https://dustinchen26.github.io/parse_du2</a></li>						
             </ul>
         </li>
     </ul>
